@@ -1,0 +1,18 @@
+enable_native_execution_engine: false
+instance_pool_id: 41ed29ff-9f05-4ce1-a86e-5b11f9cc0a82
+driver_cores: 16
+driver_memory: 112g
+executor_cores: 16
+executor_memory: 112g
+dynamic_executor_allocation:
+  enabled: false
+  min_executors: 31
+  max_executors: 31
+spark_conf:
+  spark.hadoop.fs.azure.account.oauth.provider.type: com.microsoft.azure.trident.tokenlibrary.AkvBasedClientCertTokenProvider
+  spark.hadoop.fs.azure.account.auth.akv.name: https://helixdata-keyvault-prod.vault.azure.net/
+  spark.hadoop.fs.azure.account.auth.client.id: 9ff5e18d-369b-4cdc-bb63-4df9a71c17b6
+  spark.hadoop.fs.azure.account.auth.tenant.id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+  spark.hadoop.fs.azure.account.auth.akv.certname: cert-helixdata-app-data-prod
+  spark.log.level: ALL
+runtime_version: 1.2

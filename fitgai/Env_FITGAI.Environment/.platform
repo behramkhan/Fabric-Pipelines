@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Environment",
+    "displayName": "Env_FITGAI",
+    "description": "Environment"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "71dac4d7-0682-419d-8e03-b832ed9ae891"
+  }
+}

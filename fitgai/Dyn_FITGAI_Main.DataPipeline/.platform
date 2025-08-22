@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Dyn_FITGAI_Main",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "05c13a20-e927-4598-8883-9a596fe73c54"
+  }
+}

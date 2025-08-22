@@ -1,0 +1,570 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "IfCondition",
+        "typeProperties": {
+          "expression": {
+            "value": "@equals(activity('segmentation').output.result.exitValue, '11')\n",
+            "type": "Expression"
+          },
+          "ifTrueActivities": [],
+          "ifFalseActivities": [
+            {
+              "type": "ExecutePipeline",
+              "typeProperties": {
+                "pipeline": {
+                  "referenceName": "412caad4-f78b-48b1-80b8-2d9012e660e0",
+                  "type": "PipelineReference"
+                },
+                "parameters": {
+                  "deployment_name": {
+                    "value": "@pipeline().parameters.deployment_name",
+                    "type": "Expression"
+                  },
+                  "suffix": {
+                    "value": "@pipeline().parameters.suffix",
+                    "type": "Expression"
+                  },
+                  "test": {
+                    "value": "@pipeline().parameters.test",
+                    "type": "Expression"
+                  },
+                  "experiment_name": {
+                    "value": "@pipeline().parameters.experiment_name",
+                    "type": "Expression"
+                  },
+                  "OrchestrationEnvironment": {
+                    "value": "@pipeline().parameters.OrchestrationEnvironment",
+                    "type": "Expression"
+                  },
+                  "runDateStr": {
+                    "value": "@variables('PipelineRunDate')",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true
+              },
+              "policy": {
+                "secureInput": false
+              },
+              "name": "run_labeling",
+              "dependsOn": []
+            },
+            {
+              "type": "ExecutePipeline",
+              "typeProperties": {
+                "pipeline": {
+                  "referenceName": "eb7f979d-4dd5-4b71-b90a-42af3f951155",
+                  "type": "PipelineReference"
+                },
+                "parameters": {
+                  "deployment_name": {
+                    "value": "@pipeline().parameters.deployment_name",
+                    "type": "Expression"
+                  },
+                  "suffix": {
+                    "value": "@pipeline().parameters.suffix",
+                    "type": "Expression"
+                  },
+                  "test": {
+                    "value": "@pipeline().parameters.test",
+                    "type": "Expression"
+                  },
+                  "experiment_name": {
+                    "value": "@pipeline().parameters.experiment_name",
+                    "type": "Expression"
+                  },
+                  "OrchestrationEnvironment": {
+                    "value": "@pipeline().parameters.OrchestrationEnvironment",
+                    "type": "Expression"
+                  },
+                  "runDateStr": {
+                    "value": "@variables('PipelineRunDate')",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true
+              },
+              "policy": {
+                "secureInput": false
+              },
+              "name": "run_validation",
+              "dependsOn": [
+                {
+                  "activity": "run_labeling",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "ExecutePipeline",
+              "typeProperties": {
+                "pipeline": {
+                  "referenceName": "6a9d453f-dfd3-43c7-8466-8d5df87fd720",
+                  "type": "PipelineReference"
+                },
+                "parameters": {
+                  "deployment_name": {
+                    "value": "@pipeline().parameters.deployment_name",
+                    "type": "Expression"
+                  },
+                  "suffix": {
+                    "value": "@pipeline().parameters.suffix",
+                    "type": "Expression"
+                  },
+                  "test": {
+                    "value": "@pipeline().parameters.test",
+                    "type": "Expression"
+                  },
+                  "experiment_name": {
+                    "value": "@pipeline().parameters.experiment_name",
+                    "type": "Expression"
+                  },
+                  "OrchestrationEnvironment": {
+                    "value": "@pipeline().parameters.OrchestrationEnvironment",
+                    "type": "Expression"
+                  },
+                  "runDateStr": {
+                    "value": "@variables('PipelineRunDate')",
+                    "type": "Expression"
+                  }
+                },
+                "waitOnCompletion": true
+              },
+              "policy": {
+                "secureInput": false
+              },
+              "name": "run_relabeling",
+              "dependsOn": [
+                {
+                  "activity": "run_validation",
+                  "dependencyConditions": [
+                    "Succeeded"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "name": "data availability",
+        "dependsOn": [
+          {
+            "activity": "segmentation",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "0a587b1c-0eb7-470d-964a-aec35dce06fd",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "partition_column": {
+              "value": "RunDateId",
+              "type": "string"
+            },
+            "deployment_name": {
+              "value": {
+                "value": "@pipeline().parameters.deployment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "batch_size": {
+              "value": {
+                "value": "@pipeline().parameters.batch_size",
+                "type": "Expression"
+              },
+              "type": "int"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@variables('PipelineRunDate')",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "segmentation",
+        "dependsOn": [
+          {
+            "activity": "intake",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "119e1913-4312-4b59-acb7-37621525eb09",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "intake_lh_name": {
+              "value": {
+                "value": "@pipeline().parameters.intake_lh_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "intake_table_name": {
+              "value": {
+                "value": "@pipeline().parameters.intake_table_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "survey_type": {
+              "value": {
+                "value": "@pipeline().parameters.survey_type",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "cutoff_date": {
+              "value": {
+                "value": "@pipeline().parameters.cutoff_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@variables('PipelineRunDate')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "enableFuzzyDeduplication": {
+              "value": {
+                "value": "@pipeline().parameters.enableFuzzyDeduplication",
+                "type": "Expression"
+              },
+              "type": "bool"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "intake",
+        "dependsOn": [
+          {
+            "activity": "Set Pipeline Run Date",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "edb8d549-79c2-4008-be1b-5e14b3aaf969",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "survey_type": {
+              "value": {
+                "value": "@pipeline().parameters.survey_type",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "cutoff_date": {
+              "value": {
+                "value": "@pipeline().parameters.cutoff_date",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@variables('PipelineRunDate')",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "enableFuzzyDeduplication": {
+              "value": {
+                "value": "@pipeline().parameters.enableFuzzyDeduplication",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "intake_table_name": {
+              "value": {
+                "value": "@pipeline().parameters.intake_table_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "reporting",
+        "dependsOn": [
+          {
+            "activity": "data availability",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "PipelineRunDate",
+          "value": {
+            "value": "@formatDateTime(pipeline().TriggerTime,'yyyyMMdd')",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Set Pipeline Run Date",
+        "description": "Set the trigger date of the pipeline as a variable which the steps of the pipeline will use to name buffer tables & experiment logging\n\n",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "71b4e98b-90b4-4166-b807-4b9bdbfb385b",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "partition_column": {
+              "value": "RunDateId",
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "retention_days": {
+              "value": {
+                "value": "@pipeline().parameters.retention_days",
+                "type": "Expression"
+              },
+              "type": "int"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "clean-up",
+        "dependsOn": [
+          {
+            "activity": "reporting",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "deployment_name": {
+        "type": "string",
+        "defaultValue": "gpt-4o"
+      },
+      "suffix": {
+        "type": "string",
+        "defaultValue": "prod"
+      },
+      "test": {
+        "type": "bool",
+        "defaultValue": true
+      },
+      "batch_size": {
+        "type": "int",
+        "defaultValue": 500
+      },
+      "intake_lh_name": {
+        "type": "string",
+        "defaultValue": "Dataprod"
+      },
+      "intake_table_name": {
+        "type": "string",
+        "defaultValue": "FACT_Survey"
+      },
+      "survey_type": {
+        "type": "string",
+        "defaultValue": "NPS"
+      },
+      "cutoff_date": {
+        "type": "string",
+        "defaultValue": "2023-11-15"
+      },
+      "experiment_name": {
+        "type": "string",
+        "defaultValue": "fitgai_logs"
+      },
+      "OrchestrationEnvironment": {
+        "type": "string",
+        "defaultValue": "prod"
+      },
+      "enableFuzzyDeduplication": {
+        "type": "bool",
+        "defaultValue": false
+      },
+      "label_runner_table_name": {
+        "type": "string",
+        "defaultValue": "STAGE_FITGAI_Quality"
+      },
+      "retention_days": {
+        "type": "int",
+        "defaultValue": 3
+      }
+    },
+    "variables": {
+      "WorkspaceId": {
+        "type": "String"
+      },
+      "NotebookId_intake": {
+        "type": "String"
+      },
+      "NotebookId_segmentation": {
+        "type": "String"
+      },
+      "NotebookId_report": {
+        "type": "String"
+      },
+      "PipelineRunDate": {
+        "type": "String"
+      }
+    }
+  }
+}

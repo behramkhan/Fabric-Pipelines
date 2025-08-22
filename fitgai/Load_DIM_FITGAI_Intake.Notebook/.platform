@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "Load_DIM_FITGAI_Intake",
+    "description": "Not new anymore"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "119e1913-4312-4b59-acb7-37621525eb09"
+  }
+}

@@ -1,0 +1,356 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "fc12e87a-aa35-44be-b3fe-e295663810fe",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "label_name": {
+              "value": {
+                "value": "@pipeline().parameters.sentiment_label_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "partition_column": {
+              "value": {
+                "value": "@pipeline().parameters.partition_column",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "deployment_name": {
+              "value": {
+                "value": "@pipeline().parameters.deployment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@pipeline().parameters.runDateStr",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "sentiment",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "fc12e87a-aa35-44be-b3fe-e295663810fe",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "label_name": {
+              "value": {
+                "value": "@pipeline().parameters.workload_label_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "partition_column": {
+              "value": {
+                "value": "@pipeline().parameters.partition_column",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "deployment_name": {
+              "value": {
+                "value": "@pipeline().parameters.deployment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@pipeline().parameters.runDateStr",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "workload",
+        "dependsOn": [
+          {
+            "activity": "sentiment",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "fc12e87a-aa35-44be-b3fe-e295663810fe",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "label_name": {
+              "value": {
+                "value": "@pipeline().parameters.platform_abel_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "partition_column": {
+              "value": {
+                "value": "@pipeline().parameters.partition_column",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "deployment_name": {
+              "value": {
+                "value": "@pipeline().parameters.deployment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@pipeline().parameters.runDateStr",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "platform",
+        "dependsOn": [
+          {
+            "activity": "workload",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "f560808d-336b-4f24-8349-aa568cb63b58",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "partition_column": {
+              "value": {
+                "value": "@pipeline().parameters.partition_column",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "suffix": {
+              "value": {
+                "value": "@pipeline().parameters.suffix",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "test": {
+              "value": {
+                "value": "@pipeline().parameters.test",
+                "type": "Expression"
+              },
+              "type": "bool"
+            },
+            "experiment_name": {
+              "value": {
+                "value": "@pipeline().parameters.experiment_name",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "OrchestrationEnvironment": {
+              "value": {
+                "value": "@pipeline().parameters.OrchestrationEnvironment",
+                "type": "Expression"
+              },
+              "type": "string"
+            },
+            "runDateStr": {
+              "value": {
+                "value": "@pipeline().parameters.runDateStr",
+                "type": "Expression"
+              },
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 1,
+          "retryIntervalInSeconds": 60,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "finalize",
+        "dependsOn": [
+          {
+            "activity": "platform",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "partition_column": {
+        "type": "string",
+        "defaultValue": "RunDateId"
+      },
+      "sentiment_label_name": {
+        "type": "string",
+        "defaultValue": "Sentiment"
+      },
+      "workload_label_name": {
+        "type": "string",
+        "defaultValue": "Workload"
+      },
+      "platform_abel_name": {
+        "type": "string",
+        "defaultValue": "Platform"
+      },
+      "deployment_name": {
+        "type": "string"
+      },
+      "suffix": {
+        "type": "string"
+      },
+      "test": {
+        "type": "bool"
+      },
+      "experiment_name": {
+        "type": "string"
+      },
+      "OrchestrationEnvironment": {
+        "type": "string"
+      },
+      "runDateStr": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "NotebookId_validation": {
+        "type": "String"
+      },
+      "NotebookId_validationpostprocess": {
+        "type": "String"
+      },
+      "WorkspaceId_validation": {
+        "type": "String"
+      }
+    }
+  }
+}
